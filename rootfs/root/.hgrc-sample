@@ -1,0 +1,10 @@
+[auth]
+hg.prefix = https://hg.corp.devexpress.com
+hg.username = ...
+hg.password = ...
+
+[ui]
+username = GitHub Syncer
+
+[hostfingerprints]
+hg.corp.devexpress.com = ...
