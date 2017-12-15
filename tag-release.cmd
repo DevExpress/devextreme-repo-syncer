@@ -49,7 +49,7 @@ robocopy "%WORK_DIR%\hg\GitHub" "%WORK_DIR%\github" /s /nfl /ndl
 IF %ERRORLEVEL% LEQ 1 goto error
 
 git add . || goto error
-git update-index --chmod=+x docker-ci.sh testing/launch || goto error
+git update-index --chmod=+x docker-ci.sh drone-cache.sh testing/launch || goto error
 
 git commit -F "%COMMIT_MESSAGE_FILE%" --allow-empty || goto error
 git tag "%GITHUB_TAG%" || goto error
