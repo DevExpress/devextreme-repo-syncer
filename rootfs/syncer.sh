@@ -40,6 +40,10 @@ while true; do
 
         cd /repos/$branch/github
 
+        if [ -f .git/index.lock ] && ! pidof git; then
+            unlink .git/index.lock
+        fi
+
         if ! git fetch --no-tags origin +refs/heads/$branch; then
             echo "Fetch failed"
             break
