@@ -7,8 +7,6 @@ trap "STOP_REQUESTED=true" TERM INT
 
 ITERATIONS_DONE=0
 
-RSYNC="rsync -a --checksum --delete --exclude .git"
-
 while true; do
 
     ITERATIONS_DONE=$((ITERATIONS_DONE + 1))
@@ -32,6 +30,7 @@ while true; do
 
         hg_path=/repos/$branch/hg
         gh_path=/repos/$branch/github
+        asp_demos_path=/repos/$branch/asp-demos
 
         if ! /hg-update.sh $hg_path $branch; then
             echo "Failed to update HG repo"
@@ -39,9 +38,16 @@ while true; do
         fi
 
         /git-update.sh $gh_path $branch $gh_path.log \
-            && $RSYNC $gh_path/ $hg_path/GitHub/ \
+            && /rsync-multi.sh $gh_path $hg_path/GitHub / \
             && /hg-commit.sh $hg_path $gh_path.log \
             || echo "Sync from GitHub failed"
+
+        if [ -d $asp_demos_path ]; then
+            /git-update.sh $asp_demos_path 20${branch/_/.} $asp_demos_path.log \
+                && /rsync-multi.sh $asp_demos_path/AspNetCoreDemos.DemoShell $hg_path/Demos/WidgetsGallery/WidgetsGallery.MVC/DevExtreme.NETCore.Demos DemoShell/ wwwroot/DemoShell/ .editorconfig \
+                && /hg-commit.sh $hg_path $asp_demos_path.log \
+                || echo "Sync from ASP/Demos failed"
+        fi
 
         if ! /hg-push.sh $hg_path $branch; then
             echo "Failed to push HG repo"
