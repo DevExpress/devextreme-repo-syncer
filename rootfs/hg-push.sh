@@ -10,9 +10,8 @@ fi
 
 cd "$REPO_PATH"
 
-hg outgoing || exit 0
-
 while true; do
+    hg outgoing || exit 0
     hg push && break
 
     sleep 1
