@@ -30,7 +30,7 @@ pause
 
 echo.
 echo ----------
-hg log --cwd \\hg\repos\mobile -r "last(ancestors(first(branch(tagged('%HG_TAG%')))) and author('GitHub Syncer'), 5)" --template "{date|date} {desc}\n"
+hg log --cwd \\hg\repos\mobile -r "last(ancestors(first(branch(tagged('%HG_TAG%')))) and author('Syncer Bot'), 5)" --template "{date|date} {desc}\n"
 echo ----------
 echo From the list above, choose a parent commit for this release.
 echo The topmost should work.
