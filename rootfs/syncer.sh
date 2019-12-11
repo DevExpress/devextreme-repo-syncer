@@ -47,7 +47,7 @@ while true; do
             /git-update.sh $asp_demos_path 20${branch/_/.} $asp_demos_path.log \
                 && /rsync-multi.sh $asp_demos_path/AspNetCoreDemos.DemoShell $hg_path/Demos/WidgetsGallery/WidgetsGallery.MVC/DevExtreme.NETCore.Demos DemoShell/ wwwroot/DemoShell/ .editorconfig \
                 && /rsync-multi.sh $asp_demos_path $wg_external_path AspNetCoreDemos.Reporting/ AspNetCoreDemos.RichEdit/ AspNetCoreDemos.Spreadsheet/ \
-                && find $wg_external_path -type f -regextype posix-egrep -not -regex ".*(README|menuMeta\.json|DemosStyles.*css|\.(js|cs|cshtml|md))$" -delete \
+                && find $wg_external_path -type f -regextype posix-egrep -not -regex ".*(README|menuMeta\.json|DemosStyles.*css|DemosScripts.*js|\.(cs|cshtml|md))$" -delete \
                 && /hg-commit.sh $hg_path $asp_demos_path.log \
                 || echo "Sync from ASP/Demos failed"
         fi
