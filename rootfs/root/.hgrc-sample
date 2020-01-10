@@ -4,7 +4,8 @@ hg.username = ...
 hg.password = ...
 
 [ui]
-username = GitHub Syncer
+username = Syncer Bot
+paginate = never
 
 [hostsecurity]
 hg.corp.devexpress.com:fingerprints = sha256:...
