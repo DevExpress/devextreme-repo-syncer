@@ -26,6 +26,11 @@ while true; do
             exit 0
         fi
 
+        if ! [[ "$branch" =~ ^[1-9][0-9]_[1-9]$ ]]; then
+            echo Unsupported branch name
+            exit 1
+        fi
+
         echo "Syncing $branch -----------------------------------------"
 
         hg_path=/repos/$branch/hg
