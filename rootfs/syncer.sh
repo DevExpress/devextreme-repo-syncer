@@ -35,15 +35,19 @@ while true; do
 
         hg_path=/repos/$branch/hg
         gh_path=/repos/$branch/github
-        asp_demos_path=/repos/$branch/asp-demos
-        wg_external_path=$hg_path/Demos/WidgetsGallery/ExternalDemoSources
-
         demos_on_github_path=/repos/$branch/demos-on-github
-        demos_on_github_hg_path=$hg_path/Demos/WidgetsGallery/WidgetsGallery
-        wg_mvc_demos_path=$hg_path/Demos/WidgetsGallery/WidgetsGallery.MVC
+        dxvcs_path=/repos/$branch/dxvcs
 
-        crossplatform_core_path=/repos/$branch/crossplatform-core
+        demos_on_github_hg_path=$hg_path/Demos/WidgetsGallery/WidgetsGallery
+        wg_external_path=$hg_path/Demos/WidgetsGallery/ExternalDemoSources
+        wg_mvc_demos_path=$hg_path/Demos/WidgetsGallery/WidgetsGallery.MVC
         data_portions_path=$hg_path/Tools/DevExpress.Data.Portions
+
+        if [[ "$branch" > "20_1" ]]; then
+            aspnetcore_shell_path=$hg_path/Demos/WidgetsGallery/AspNetCoreDemos.DemoShell
+        else
+            aspnetcore_shell_path=$hg_path/Demos/WidgetsGallery/WidgetsGallery.MVC/DevExtreme.NETCore.Demos
+        fi
 
         if ! /hg-update.sh $hg_path $branch; then
             echo "Failed to update HG repo"
@@ -55,25 +59,39 @@ while true; do
             && /hg-commit.sh $hg_path $gh_path.log \
             || echo "Sync from GitHub failed"
 
-        if [ -d $asp_demos_path ]; then
-            if [[ $branch > "20_1"  ]]; then
-                demo_shell_path=$hg_path/Demos/WidgetsGallery/AspNetCoreDemos.DemoShell
-            else
-                demo_shell_path=$hg_path/Demos/WidgetsGallery/WidgetsGallery.MVC/DevExtreme.NETCore.Demos
+        if [[ "$branch" < "21_1" ]]; then
+            asp_demos_path=/repos/$branch/asp-demos
+            crossplatform_core_path=/repos/$branch/crossplatform-core
+            win_path=$crossplatform_core_path/Win
+            rm -f $dxvcs_path.log
+            if [ -d $asp_demos_path ]; then
+                /git-update.sh $asp_demos_path 20${branch/_/.} $asp_demos_path.log
+                echo "asp_demos:" >> $dxvcs_path.log
+                cat $asp_demos_path.log >> $dxvcs_path.log
             fi
-            /git-update.sh $asp_demos_path 20${branch/_/.} $asp_demos_path.log \
-                && /rsync-multi.sh $asp_demos_path/AspNetCoreDemos.DemoShell $demo_shell_path DemoShell/ wwwroot/DemoShell/ .editorconfig \
-                && /rsync-multi.sh $asp_demos_path $wg_external_path AspNetCoreDemos.Reporting/ AspNetCoreDemos.RichEdit/ AspNetCoreDemos.Spreadsheet/ \
-                && find $wg_external_path -type f -regextype posix-egrep -not -regex ".*(README|menuMeta\.json|DemosStyles.*css|DemosScripts.*js|\.(cs|cshtml|md))$" -delete \
-                && /hg-commit.sh $hg_path $asp_demos_path.log \
-                || echo "Sync from ASP/Demos failed"
+            if [ -d $crossplatform_core_path ]; then
+                /git-update.sh $crossplatform_core_path 20${branch/_/.} $crossplatform_core_path.log
+                echo "crossplatform_core:" >> $dxvcs_path.log
+                cat $crossplatform_core_path.log >> $dxvcs_path.log
+            fi
+        else
+            /git-update.sh $dxvcs_path 20${branch/_/.} $dxvcs_path.log
+            asp_demos_path=$dxvcs_path/Demos.ASP
+            win_path=$dxvcs_path/Win
         fi
 
-        if [ -d $crossplatform_core_path ]; then
-            /git-update.sh $crossplatform_core_path 20${branch/_/.} $crossplatform_core_path.log \
-            && /rsync-multi.sh $crossplatform_core_path/Win/DevExpress.Data/DevExpress.Data $data_portions_path AssemblyVersion.cs Utils/Logify.cs Utils/UAlgo.cs Utils/UAlgoConstants.cs Utils/UAlgoPost.cs Utils/UData.cs Utils/UTest.cs \
-            && /hg-commit.sh $hg_path $crossplatform_core_path.log \
-            || echo "Sync from CrossPlatform/Core failed"
+        if [ -d "$asp_demos_path" ]; then
+            /rsync-multi.sh $asp_demos_path/AspNetCoreDemos.DemoShell $aspnetcore_shell_path DemoShell/ wwwroot/DemoShell/ .editorconfig
+            /rsync-multi.sh $asp_demos_path $wg_external_path AspNetCoreDemos.Reporting/ AspNetCoreDemos.RichEdit/ AspNetCoreDemos.Spreadsheet/
+            find $wg_external_path -type f -regextype posix-egrep -not -regex ".*(README|menuMeta\.json|DemosStyles.*css|DemosScripts.*js|\.(cs|cshtml|md))$" -delete
+        fi
+
+        if [ -d "$win_path" ]; then
+            /rsync-multi.sh $win_path/DevExpress.Data/DevExpress.Data $data_portions_path AssemblyVersion.cs Utils/Logify.cs Utils/UAlgo.cs Utils/UAlgoConstants.cs Utils/UAlgoPost.cs Utils/UData.cs Utils/UTest.cs
+        fi
+
+        if [ -d $asp_demos_path ] || [ -d $win_path ]; then
+            /hg-commit.sh $hg_path $dxvcs_path.log
         fi
 
         if [ -d $demos_on_github_path ]; then
