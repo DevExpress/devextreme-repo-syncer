@@ -38,7 +38,7 @@ while true; do
         demos_on_github_path=/repos/$branch/demos-on-github
         dxvcs_path=/repos/$branch/dxvcs
 
-        demos_on_github_hg_path=$hg_path/Demos/WidgetsGallery/WidgetsGallery
+        demos_on_github_hg_path=$hg_path/GitHub_Demos
         wg_external_path=$hg_path/Demos/WidgetsGallery/ExternalDemoSources
         wg_mvc_demos_path=$hg_path/Demos/WidgetsGallery/WidgetsGallery.MVC
         data_portions_path=$hg_path/Tools/DevExpress.Data.Portions
@@ -96,9 +96,7 @@ while true; do
 
         if [ -d $demos_on_github_path ]; then
             /git-update.sh $demos_on_github_path $branch $demos_on_github_path.log \
-            && /rsync-multi.sh $demos_on_github_path $demos_on_github_hg_path utils/ JSDemos/ package.json \
-            && /rsync-multi.sh $demos_on_github_path/MVCDemos $wg_mvc_demos_path/DevExtreme.MVC.Demos / \
-            && /rsync-multi.sh $demos_on_github_path/NetCoreDemos $wg_mvc_demos_path/DevExtreme.NETCore.Demos / \
+            && /rsync-multi.sh $demos_on_github_path $demos_on_github_hg_path / \
             && /hg-commit.sh $hg_path $demos_on_github_path.log \
             || echo "Sync from Demos/WidgetsGallery/WidgetsGallery failed"
         fi
