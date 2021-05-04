@@ -1,8 +1,5 @@
 #!/bin/bash
 
-docker stop syncer
-docker rm syncer
-
 docker run -dti \
     --name=syncer \
     -v repos:/repos \
