@@ -38,11 +38,11 @@ Use a Linux machine with Docker.
 
 ## Add the next branch
 
-- `docker stop syncer`
+- `stop.sh` - may take some time, don't interrupt
 - Make a copy of clones:  
   `cp -r /var/lib/docker/volumes/repos/_data/XX_X /var/lib/docker/volumes/repos/_data/YY_Y`
 - Add a line to branches.txt
-- `docker start syncer`
+- `start.sh`
 - Check logs: `tail.sh`
 
 ## Exclude a branch
