@@ -10,7 +10,7 @@ fi
 
 cd "$REPO_PATH"
 
-while true; do
+for i in {0..10}; do
     hg outgoing || exit 0
     hg push && break
 
