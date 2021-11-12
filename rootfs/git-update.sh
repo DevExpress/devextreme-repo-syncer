@@ -15,11 +15,19 @@ if [ -f .git/index.lock ] && ! pidof git; then
     unlink .git/index.lock
 fi
 
-git fetch --force --depth=100 --no-tags origin $BRANCH:$BRANCH || exit 1
+echo "syncing $REPO_PATH $BRANCH $LOG_PATH"
+remote_url=$(git remote -v | grep -Po '(?<=origin\s).*(?=\s\(fetch\))' | head -n 1)
 
-git log --pretty=format:"%h %an - %s" HEAD..FETCH_HEAD > "$LOG_PATH"
-if [ ! -s "$LOG_PATH" ]; then
-    echo "(empty log)" > "$LOG_PATH"
+if [ "$(git ls-remote --heads $remote_url $BRANCH | wc -l)" == "1" ]; then
+
+    git fetch --force --depth=100 --no-tags origin $BRANCH:$BRANCH || exit 1
+
+    git log --pretty=format:"%h %an - %s" HEAD..FETCH_HEAD > "$LOG_PATH"
+    if [ ! -s "$LOG_PATH" ]; then
+        echo "(empty log)" > "$LOG_PATH"
+    fi
+
+    git checkout -qf FETCH_HEAD
+else
+    echo "The $BRANCH does not exist on $remote_url"
 fi
-
-git checkout -qf FETCH_HEAD
