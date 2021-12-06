@@ -4,6 +4,12 @@ Use a Linux machine with Docker.
 
 1. Create rootfs/root/.hgrc based on [.hgrc-sample](rootfs/root/.hgrc-sample)
 
+1. Create rootfs/root/.ssh/github/id_rsa using the following command:
+
+   ```
+   ssh-keygen -t rsa -b 4096 -C 'your@email.com' -f /path/to/rootfs/root/.ssh/github/id_rsa -q -N ''
+   ```
+
 2. Prepare a volume for repos
 
    ```

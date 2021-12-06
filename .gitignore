@@ -1,1 +1,3 @@
 /rootfs/root/.hgrc
+/rootfs/root/.ssh/github/**/*
+!/rootfs/root/.ssh/github/README.md
