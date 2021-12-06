@@ -37,7 +37,9 @@ while true; do
         gh_path=/repos/$branch/github
         demos_on_github_path=/repos/$branch/demos-on-github
         dxvcs_path=/repos/$branch/dxvcs
+        tools_github_path=/repos/$branch/tools-on-github
 
+        tools_hg_path=$hg_path/Tools
         demos_on_github_hg_path=$hg_path/GitHub_Demos
         wg_external_path=$hg_path/Demos/WidgetsGallery/ExternalDemoSources
         wg_mvc_demos_path=$hg_path/Demos/WidgetsGallery/WidgetsGallery.MVC
@@ -84,6 +86,13 @@ while true; do
             && /rsync-multi.sh $demos_on_github_path $demos_on_github_hg_path / \
             && /hg-commit.sh $hg_path $demos_on_github_path.log \
             || echo "Sync from Demos/WidgetsGallery/WidgetsGallery failed"
+        fi
+
+        if [ -d $tools_github_path ]; then
+            /git-update.sh $tools_github_path $branch $tools_github_path.log \
+            && /rsync-multi.sh $tools_github_path $tools_hg_path / \
+            && /hg-commit.sh $hg_path $tools_github_path.log \
+            || echo "Sync from Tools failed"
         fi
 
         if ! /hg-push.sh $hg_path $branch; then
