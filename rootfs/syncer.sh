@@ -90,7 +90,7 @@ while true; do
 
         if [ -d $tools_github_path ]; then
             /git-update.sh $tools_github_path $branch $tools_github_path.log \
-            && /rsync-multi.sh $tools_github_path $tools_hg_path / \
+            && /rsync-multi.sh $tools_github_path $tools_hg_path Declarations.json Descriptions.json \
             && /hg-commit.sh $hg_path $tools_github_path.log \
             || echo "Sync from Tools failed"
         fi
