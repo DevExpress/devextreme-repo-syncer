@@ -6,15 +6,23 @@ set SYNCER_LOG_FILE=%WORK_DIR%\syncer_log.txt
 set COMMIT_MESSAGE_FILE=%WORK_DIR%\commit_message.txt
 if exist "%WORK_DIR%" rd /q /s "%WORK_DIR%"
 
+set /p HG_PATH="Enter local HG repo path (e.g. C:\work\hg): "
+if not exist "%HG_PATH%\.hg" (
+	echo No Mercurial repo detected at this path
+	goto error
+)
+hg pull --cwd "%HG_PATH%"
+
+
 set /p HG_TAG="Existing Mercurial tag used to build installations (e.g. 17_1_2): "
 echo downloading...
-hg archive --no-decode --cwd \\hg\repos\mobile -r "tag('%HG_TAG%')" --include GitHub "%WORK_DIR%\hg" || goto error
+hg archive --no-decode --cwd "%HG_PATH%" -r "tag('%HG_TAG%')" --include GitHub "%WORK_DIR%\hg" || goto error
 
 set /p GITHUB_TAG="GitHub tag to be created (e.g. 17.1.2-pre-beta): "
 
 echo preparing commit message...
 echo Release %GITHUB_TAG% > "%COMMIT_MESSAGE_FILE%"
-hg log --cwd \\hg\repos\mobile -r "branch(tagged('%HG_TAG%')) and user('GitHub Syncer')" --template "  {desc}\r\n" > "%SYNCER_LOG_FILE%"
+hg log --cwd "%HG_PATH%" -r "branch(tagged('%HG_TAG%')) and user('GitHub Syncer')" --template "  {desc}\r\n" > "%SYNCER_LOG_FILE%"
 
 for /f %%i in ("%SYNCER_LOG_FILE%") do set SYNCER_LOG_FILE_SIZE=%%~zi
 if %SYNCER_LOG_FILE_SIZE% gtr 0 (
@@ -30,10 +38,10 @@ pause
 
 echo.
 echo ----------
-hg log --cwd \\hg\repos\mobile -r "last(ancestors(first(branch(tagged('%HG_TAG%')))) and author('Syncer Bot'), 5)" --template "{date|date} {desc}\n"
+hg log --cwd "%HG_PATH%" --pager=off -r "last(ancestors(first(branch(tagged('%HG_TAG%')))) and author('Syncer Bot'), 5)" --template "{date|date} {desc}\n"
 echo ----------
 echo From the list above, choose a parent commit for this release.
-echo The topmost should work.
+echo The topmost (first in the list) should work.
 set /p GITHUB_PARENT="commit sha: "
 
 echo.
