@@ -73,7 +73,7 @@ while true; do
             fi
 
             if [ -d "$win_path" ]; then
-                /rsync-multi.sh $win_path/DevExpress.Data/DevExpress.Data $data_portions_path AssemblyVersion.cs Utils/Logify.cs Utils/UAlgo.cs Utils/UAlgoConstants.cs Utils/UAlgoPost.cs Utils/UData.cs Utils/UTest.cs
+                /rsync-multi.sh $win_path/DevExpress.Data/DevExpress.Data $data_portions_path AssemblyVersion.cs Utils/
             fi
 
             if [ -d $asp_demos_path ] || [ -d $win_path ]; then
