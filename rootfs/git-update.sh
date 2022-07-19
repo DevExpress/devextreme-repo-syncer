@@ -11,8 +11,9 @@ fi
 
 cd "$REPO_PATH"
 
-if [ -f .git/index.lock ] && ! pidof git; then
-    unlink .git/index.lock
+if ! pidof git; then
+    [ -f .git/index.lock ]   && unlink .git/index.lock
+    [ -f .git/shallow.lock ] && unlink .git/shallow.lock
 fi
 
 echo "syncing $REPO_PATH $BRANCH $LOG_PATH"
@@ -20,7 +21,7 @@ remote_url=$(git remote -v | grep -Po '(?<=origin\s).*(?=\s\(fetch\))' | head -n
 
 if [ "$(git ls-remote --heads $remote_url $BRANCH | wc -l)" == "1" ]; then
 
-    git fetch --force --depth=100 --no-tags origin $BRANCH:$BRANCH || exit 1
+    git fetch --update-head-ok --force --depth=100 --no-tags origin $BRANCH:$BRANCH || exit 1
 
     git log --pretty=format:"%h %an - %s" HEAD..FETCH_HEAD > "$LOG_PATH"
     if [ ! -s "$LOG_PATH" ]; then
