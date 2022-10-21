@@ -22,7 +22,7 @@ set /p GITHUB_TAG="GitHub tag to be created (e.g. 17.1.2-pre-beta): "
 
 echo preparing commit message...
 echo Release %GITHUB_TAG% > "%COMMIT_MESSAGE_FILE%"
-hg log --cwd "%HG_PATH%" -r "branch(tagged('%HG_TAG%')) and user('GitHub Syncer')" --template "  {desc}\r\n" > "%SYNCER_LOG_FILE%"
+hg log --cwd "%HG_PATH%" -r "branch(tagged('%HG_TAG%')) and user('Syncer Bot')" --template "  {desc}\r\n" > "%SYNCER_LOG_FILE%"
 
 for /f %%i in ("%SYNCER_LOG_FILE%") do set SYNCER_LOG_FILE_SIZE=%%~zi
 if %SYNCER_LOG_FILE_SIZE% gtr 0 (
