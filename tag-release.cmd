@@ -38,7 +38,7 @@ pause
 
 echo.
 echo ----------
-hg log --cwd "%HG_PATH%" --pager=off -r "last(ancestors(first(branch(tagged('%HG_TAG%')))) and author('Syncer Bot'), 5)" --template "{date|date} {desc}\n"
+hg log --cwd "%HG_PATH%" --pager=off -r "sort(last(ancestors(first(branch(tagged('%HG_TAG%')))) and author('Syncer Bot'), 5), -date)" --template "{date|date} {desc}\n"
 echo ----------
 echo From the list above, choose a parent commit for this release.
 echo The topmost (first in the list) should work.
