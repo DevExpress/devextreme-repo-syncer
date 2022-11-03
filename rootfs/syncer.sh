@@ -42,7 +42,6 @@ while true; do
         tools_hg_path=$hg_path/Tools
         demos_on_github_hg_path=$hg_path/GitHub_Demos
         wg_external_path=$hg_path/Demos/WidgetsGallery/ExternalDemoSources
-        wg_mvc_demos_path=$hg_path/Demos/WidgetsGallery/WidgetsGallery.MVC
         data_portions_path=$hg_path/Tools/DevExpress.Data.Portions
 
         if [[ "$branch" > "20_1" ]]; then
@@ -59,7 +58,7 @@ while true; do
         /git-update.sh $gh_path $branch $gh_path.log \
             && /rsync-multi.sh $gh_path $hg_path/GitHub / \
             && /hg-commit.sh $hg_path $gh_path.log \
-            || echo "Sync from GitHub failed"
+            || echo "Sync failed: DevExtreme main repo"
 
         if [ -d "$dxvcs_path" ]; then
             /git-update.sh $dxvcs_path 20${branch/_/.} $dxvcs_path.log
@@ -85,14 +84,14 @@ while true; do
             /git-update.sh $demos_on_github_path $branch $demos_on_github_path.log \
             && /rsync-multi.sh $demos_on_github_path $demos_on_github_hg_path / \
             && /hg-commit.sh $hg_path $demos_on_github_path.log \
-            || echo "Sync from Demos/WidgetsGallery/WidgetsGallery failed"
+            || echo "Sync failed: DevExtreme demos repo"
         fi
 
         if [ -d $tools_github_path ]; then
             /git-update.sh $tools_github_path $branch $tools_github_path.log \
             && /rsync-multi.sh $tools_github_path $tools_hg_path Declarations.json Descriptions.json \
             && /hg-commit.sh $hg_path $tools_github_path.log \
-            || echo "Sync from Tools failed"
+            || echo "Sync failed: devextreme-hgmirror-tools"
         fi
 
         if ! /hg-push.sh $hg_path $branch; then
