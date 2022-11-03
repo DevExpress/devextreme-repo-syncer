@@ -3,10 +3,12 @@
 SOURCE=$1; shift
 DEST=$1;   shift
 
-if [ ! -d "$SOURCE" ] || [ ! -d "$DEST" ]; then
+if [ ! -d "$SOURCE" ] || [ -z "$DEST" ]; then
     echo "Usage: $0 SOURCE DEST ..."
     exit 1
 fi
+
+mkdir -p "$DEST"
 
 echo "rsync $SOURCE to $DEST"
 

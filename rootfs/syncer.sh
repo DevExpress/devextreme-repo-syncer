@@ -64,6 +64,7 @@ while true; do
             /git-update.sh $dxvcs_path 20${branch/_/.} $dxvcs_path.log
             asp_demos_path=$dxvcs_path/Demos.ASP
             win_path=$dxvcs_path/Win
+            xmldoc_netcore_source_path=$dxvcs_path/Builds.2005/HelpXml/HelpCore
 
             if [ -d "$asp_demos_path" ]; then
                 /rsync-multi.sh $asp_demos_path/AspNetCoreDemos.DemoShell $aspnetcore_shell_path DemoShell/ wwwroot/DemoShell/ .editorconfig
@@ -75,9 +76,11 @@ while true; do
                 /rsync-multi.sh $win_path/DevExpress.Data/DevExpress.Data $data_portions_path AssemblyVersion.cs Utils/
             fi
 
-            if [ -d $asp_demos_path ] || [ -d $win_path ]; then
-                /hg-commit.sh $hg_path $dxvcs_path.log
+            if [ -d "$xmldoc_netcore_source_path" ]; then
+                /rsync-multi.sh $xmldoc_netcore_source_path $hg_path/Tools/XmlDocNetCore DevExtreme.AspNet.Core.xml
             fi
+
+            /hg-commit.sh $hg_path $dxvcs_path.log
         fi
 
         if [ -d $demos_on_github_path ]; then
