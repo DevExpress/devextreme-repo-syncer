@@ -76,7 +76,8 @@ while true; do
                 /rsync-multi.sh $win_path/DevExpress.Data/DevExpress.Data $data_portions_path AssemblyVersion.cs Utils/
             fi
 
-            if [ -d "$xmldoc_netcore_source_path" ]; then
+            #TODO: remove skip 23_2 branch
+            if [ -d "$xmldoc_netcore_source_path" -a "$branch" != "23_2" ]; then
                 /rsync-multi.sh $xmldoc_netcore_source_path $hg_path/Tools/XmlDocNetCore DevExtreme.AspNet.Core.xml
             fi
 
