@@ -78,7 +78,7 @@ while true; do
             fi
 
             if [ -d "$win_path" ]; then
-                /rsync-multi.sh $win_path/DevExpress.Data/DevExpress.Data $data_portions_path AssemblyVersion.cs Utils/
+                /rsync-multi.sh $win_path/DevExpress.Data/DevExpress.Data $data_portions_path AssemblyVersion.cs Utils/ DataController/ Filtering/
             fi
 
             if [ -d "$xmldoc_netcore_source_path" ]; then
