@@ -78,7 +78,11 @@ while true; do
             fi
 
             if [ -d "$win_path" ]; then
-                /rsync-multi.sh $win_path/DevExpress.Data/DevExpress.Data $data_portions_path AssemblyVersion.cs Utils/ DataController/ Filtering/
+                if [[ "$branch" > "22_2" ]]; then
+                    /rsync-multi.sh $win_path/DevExpress.Data/DevExpress.Data $data_portions_path AssemblyVersion.cs Utils/ DataController/ Filtering/
+                else
+                    /rsync-multi.sh $win_path/DevExpress.Data/DevExpress.Data $data_portions_path AssemblyVersion.cs Utils/
+                fi
             fi
 
             if [ -d "$xmldoc_netcore_source_path" ]; then
