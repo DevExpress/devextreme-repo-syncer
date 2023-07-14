@@ -38,6 +38,7 @@ while true; do
         demos_on_github_path=/repos/$branch/demos-on-github
         dxvcs_path=/repos/$branch/dxvcs
         tools_github_path=/repos/$branch/tools-on-github
+        aspnet_github_path=/repos/$branch/aspnet
 
         tools_hg_path=$hg_path/Tools
         demos_on_github_hg_path=$hg_path/GitHub_Demos
@@ -104,6 +105,13 @@ while true; do
             && /rsync-multi.sh $tools_github_path $tools_hg_path Declarations.json Descriptions.json \
             && /hg-commit.sh $hg_path $tools_github_path.log \
             || echo "Sync failed: devextreme-hgmirror-tools"
+        fi
+
+        if [ -d $aspnet_github_path ]; then
+            /git-update.sh $aspnet_github_path $branch $aspnet_github_path.log \
+            && /rsync-multi.sh $aspnet_github_path $hg_path/DevExtreme.AspNet.Mvc / \
+            && /hg-commit.sh $hg_path $aspnet_github_path.log \
+            || echo "Sync failed: devextreme-aspnet repo"
         fi
 
         if ! /hg-push.sh $hg_path $branch; then
