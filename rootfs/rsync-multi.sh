@@ -14,5 +14,9 @@ echo "rsync $SOURCE to $DEST"
 
 for i in "$@"; do
     [ "$i" == "/" ] || echo "  $i"
-    rsync -a --delete --exclude .git "$SOURCE/$i" "$DEST/$i" || exit 1
+    if [[ "$SOURCE" == *aspnet ]]; then
+        rsync -a --exclude .git "$SOURCE/$i" "$DEST/$i" || exit 1
+    else
+        rsync -a --delete --exclude .git "$SOURCE/$i" "$DEST/$i" || exit 1
+    fi
 done
