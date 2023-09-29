@@ -80,7 +80,7 @@ while true; do
 
             if [ -d "$win_path" ]; then
                 if [[ "$branch" > "22_2" ]]; then
-                    /rsync-multi.sh $win_path/DevExpress.Data/DevExpress.Data $data_portions_path AssemblyVersion.cs Utils/ DataController/ Filtering/
+                    /rsync-multi.sh $win_path/DevExpress.Data/DevExpress.Data $data_portions_path AssemblyVersion.cs Utils/ DataController/ Filtering/ Printing/
                 else
                     /rsync-multi.sh $win_path/DevExpress.Data/DevExpress.Data $data_portions_path AssemblyVersion.cs Utils/
                 fi
