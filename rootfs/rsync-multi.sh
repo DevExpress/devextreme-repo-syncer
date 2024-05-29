@@ -41,5 +41,5 @@ echo "rsync $SOURCE to $DEST"
 
 for i in "$@"; do
     [ "$i" == "/" ] || echo "  $i"
-    rsync -v --dry-run -a --exclude .git $ADDITIONAL_ARGS "$SOURCE/$i" "$DEST/$i" || exit 1
+    rsync -a --exclude .git $ADDITIONAL_ARGS "$SOURCE/$i" "$DEST/$i" || exit 1
 done
