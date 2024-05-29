@@ -109,7 +109,8 @@ while true; do
 
         if [ -d $aspnet_github_path ]; then
             /git-update.sh $aspnet_github_path $branch $aspnet_github_path.log \
-            && /rsync-multi.sh $aspnet_github_path $hg_path/DevExtreme.AspNet.Mvc / \
+            && /rsync-multi.sh -e Demos -k $aspnet_github_path $hg_path/DevExtreme.AspNet.Mvc / \
+            && /rsync-multi.sh $aspnet_github_path/Demos $demos_on_github_hg_path / \
             && /hg-commit.sh $hg_path $aspnet_github_path.log \
             || echo "Sync failed: devextreme-aspnet repo"
         fi
