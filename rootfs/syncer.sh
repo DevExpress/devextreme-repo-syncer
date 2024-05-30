@@ -39,6 +39,7 @@ while true; do
         dxvcs_path=/repos/$branch/dxvcs
         tools_github_path=/repos/$branch/tools-on-github
         aspnet_github_path=/repos/$branch/aspnet
+        aspnet_github_demos_path=$aspnet_github_path/Demos
 
         tools_hg_path=$hg_path/Tools
         demos_on_github_hg_path=$hg_path/GitHub_Demos
@@ -109,9 +110,15 @@ while true; do
 
         if [ -d $aspnet_github_path ]; then
             /git-update.sh $aspnet_github_path $branch $aspnet_github_path.log \
-            && /rsync-multi.sh $aspnet_github_path $hg_path/DevExtreme.AspNet.Mvc / \
+            && /rsync-multi.sh -e Demos -k $aspnet_github_path $hg_path/DevExtreme.AspNet.Mvc / \
             && /hg-commit.sh $hg_path $aspnet_github_path.log \
             || echo "Sync failed: devextreme-aspnet repo"
+        fi
+
+        if [ -d $aspnet_github_demos_path ]; then
+            /rsync-multi.sh $aspnet_github_demos_path $demos_on_github_hg_path / \
+            && /hg-commit.sh $hg_path $demos_on_github_path.log \
+            || echo "Sync failed: devextreme-aspnet demos"
         fi
 
         if ! /hg-push.sh $hg_path $branch; then
