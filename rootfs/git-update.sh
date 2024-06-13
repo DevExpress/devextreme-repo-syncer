@@ -19,7 +19,7 @@ fi
 echo "syncing $REPO_PATH $BRANCH $LOG_PATH"
 remote_url=$(git remote -v | grep -Po '(?<=origin\s).*(?=\s\(fetch\))' | head -n 1)
 
-if [ "$(git ls-remote --heads $remote_url $BRANCH | wc -l)" == "1" ]; then
+if [ "$(git ls-remote --heads $remote_url heads/$BRANCH | wc -l)" == "1" ]; then
 
     git fetch --update-head-ok --force --depth=100 --no-tags origin $BRANCH:$BRANCH || exit 1
 
