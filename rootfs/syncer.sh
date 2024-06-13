@@ -79,7 +79,7 @@ while true; do
                 find $wg_external_path -type f -regextype posix-egrep -not -regex ".*(README|menuMeta\.json|DemosStyles.*css|DemosScripts.*js|\.(cs|cshtml|md))$" -delete
             fi
 
-            if [ -d "$win_path" ]; then
+            if [[ -d "$win_path" && "$branch" < "24_1" ]]; then
                 if [[ "$branch" > "22_2" ]]; then
                     /rsync-multi.sh $win_path/DevExpress.Data/DevExpress.Data $data_portions_path AssemblyVersion.cs Utils/ DataController/ Filtering/ Printing/ Platform/
                 else
