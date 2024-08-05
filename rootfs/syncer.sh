@@ -56,7 +56,7 @@ while true; do
             && /hg-commit.sh $hg_path $gh_path.log \
             || echo "Sync failed: DevExtreme main repo"
 
-        if [ -d "$dxvcs_path" ]; then
+        if [[ -d "$dxvcs_path" && "$branch" < "24_2" ]]; then
             /git-update.sh $dxvcs_path 20${branch/_/.} $dxvcs_path.log
             asp_demos_path=$dxvcs_path/Demos.ASP
             win_path=$dxvcs_path/Win
