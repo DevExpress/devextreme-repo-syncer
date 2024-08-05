@@ -104,7 +104,7 @@ while true; do
 
         if [ -d $aspnet_github_demos_path ]; then
             /rsync-multi.sh $aspnet_github_demos_path $demos_on_github_hg_path / \
-            && /hg-commit.sh $hg_path $demos_on_github_path.log \
+            && /hg-commit.sh $hg_path $aspnet_github_path.log \
             || echo "Sync failed: devextreme-aspnet demos"
         fi
 
